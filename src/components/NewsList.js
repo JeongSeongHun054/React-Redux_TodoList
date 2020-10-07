@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import NewsItem from "./NewsItem";
+import usePromise from "../lib/usePromise";
 
 const NewsListBlock = styled.div`
   box-sizing: border-box;
@@ -17,32 +18,24 @@ const NewsListBlock = styled.div`
 `;
 
 const NewsList = ({ category }) => {
-  const [articles, setArticles] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const query = category === "all" ? "" : `&category=${category}`;
-        console.log(query);
-        const res = await axios.get(
-          `https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=f7c5e4ec1c58416686db20e5cdb94f6f`
-        );
-        setArticles(res.data.articles);
-      } catch (e) {
-        console.log(e);
-      }
-      setLoading(false);
-    };
-    fetchData();
+  const [loading, response, error] = usePromise(() => {
+    const query = category === "all" ? "" : `&category=${category}`;
+    return axios.get(
+      `https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=f7c5e4ec1c58416686db20e5cdb94f6f`
+    );
   }, [category]);
+
   if (loading) {
     return <NewsListBlock>Loading...</NewsListBlock>;
   }
-  if (!articles) {
+  if (!response) {
     return null;
   }
+  if (error) {
+    return <NewsListBlock>에러 발생!!</NewsListBlock>;
+  }
+
+  const { articles } = response.data;
   return (
     <NewsListBlock>
       {articles.map((article) => (
