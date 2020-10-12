@@ -1,9 +1,15 @@
 import React from "react";
-import { Route } from "react-router-dom";
-import NewsPage from "./pages/Newspage";
+import CounterContainer from "./containers/CounterContainers";
+import TodoContainer from "./containers/TodoContainer";
 
 const App = () => {
-  return <Route path="/:category?" component={NewsPage} />;
+  return (
+    <div>
+      <CounterContainer />
+      <hr />
+      <TodoContainer />
+    </div>
+  );
 };
 
 export default App;
