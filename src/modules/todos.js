@@ -49,10 +49,7 @@ export const remove = createAction(REMOVE, (id) => id);
 /*===========State 초기값 설정==============*/
 const initialState = {
   input: "",
-  todos: [
-    { id: 1, text: "Redux Basic", done: false },
-    { id: 2, text: "React Redux", done: false },
-  ],
+  todos: [],
 };
 
 /*===========Reducer 함수 정의==============*/

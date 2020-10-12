@@ -1,6 +1,6 @@
 import React from "react";
 import CounterContainer from "./containers/CounterContainers";
-import TodoContainer from "./containers/TodoContainer";
+import TodoContainer from "./containers/TodosContainer";
 
 const App = () => {
   return (
