@@ -118,6 +118,8 @@ export default CounterContainer;
 
 ## useCallback을 통한  컴포넌트 성능 최적화
 
+`useSelector와 useDispatch는 connect와는 다르게 부모 컴포넌트가 리렌더링되면 자동으로 같이 리렌더링이 된다. 그러므로 useCallback을 통한 최적화 작업이 꼭 필요하다.`
+
 ```javascript
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
