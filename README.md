@@ -6,7 +6,7 @@
 - [x] useCallback을 사용한 컴포넌트 최적화
 - [x] mapStateToProps, mapDispatchToProps 와 useSelector, useDispatch를 사용했을 때의 차이
 
-## redux-actions 적용 전후 비교
+## redux-actions
 
 - redux-actions 적용 전
 
@@ -59,4 +59,86 @@ const counter = handleActions(
   },
   initialState
 );
+```
+
+## useSelector && useDispatch
+
+- 적용 전
+
+```javascript
+import React from "react";
+import { connect } from "react-redux";
+import Counter from "../components/Counter";
+import { decrease, increase } from "../modules/counter";
+
+const CounterContainer = ({ number, increase, decrease }) => {
+  return (
+    <Counter
+      number={number}
+      onIncrease={increase}
+      onDecrease={decrease}
+    />
+  );
+};
+
+export default connect(
+  (state) => ({
+    number: state.counter.number,
+  }),
+  (dispatch) => ({
+    increase: () => dispatch(increase()),
+    decrease: () => dispatch(decrease()),
+  })
+)(CounterContainer);
+```
+
+- 적용 후
+
+```javascript
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Counter from "../components/Counter";
+import { decrease, increase } from "../modules/counter";
+
+const CounterContainer = () => {
+  const number = useSelector((state) => state.counter.number);
+  const dispatch = useDispatch();
+
+  return (
+    <Counter
+      number={number}
+      onIncrease={() => dispatch(increase())}
+      onDecrease={() => dispatch(decrease())}
+    />
+  );
+};
+
+export default CounterContainer;
+```
+
+## useCallback을 통한  컴포넌트 성능 최적화
+
+```javascript
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Counter from "../components/Counter";
+import { decrease, increase } from "../modules/counter";
+
+const CounterContainer = () => {
+  const number = useSelector((state) => state.counter.number);
+  const dispatch = useDispatch();
+
+  const onIncrease = useCallback(() => dispatch(increase()), [dispatch]);
+  const onDecrease = useCallback(() => dispatch(decrease()), [dispatch]);
+
+  return (
+    <Counter
+      number={number}
+      onIncrease={onIncrease}
+      onDecrease={onDecrease}
+    />
+  );
+};
+
+export default CounterContainer;
 ```
